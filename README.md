@@ -5,6 +5,9 @@
 - Simply - car speed in game controls your real-life fan 𖣘
 - As of now Xiaomi Smart Fans are supported
 
+## Disclaimer
+- Currently only *Windows* supported
+
 ## Installation
 - Clone this repo
 - Run `poetry install`
@@ -17,7 +20,7 @@
 ## Plugin in `/addon`
 - Copy the whole folder `wind_speed` to your Assetto Corsa apps path
   - May be something like this:
-  - `C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\python\wind_speed`
+    - `C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\python\wind_speed`
 - Make sure the path is correct in the `wind_speed\wind_speed.py` file:
   - `assetto_path = Path("C:/Program Files (x86)/Steam/steamapps/common/assettocorsa")`
 

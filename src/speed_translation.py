@@ -1,6 +1,7 @@
 from enum import Enum
 
 class SpeedLevel(Enum):
+    OFF = 0
     LOW = 1
     MEDIUM = 2
     HIGH = 3
@@ -16,5 +17,5 @@ def speed_to_level(speed: int) -> SpeedLevel:
         if speed >= threshold:
             return level
 
-    raise Exception("Unsupported speed")
+    return SpeedLevel.OFF
 

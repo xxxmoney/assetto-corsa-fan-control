@@ -3,7 +3,6 @@ import ac
 import acsys
 import json
 import re
-import os, sys, platform
 from third_party.sim_info import *
 
 #
@@ -14,7 +13,7 @@ assetto_path = Path("C:/Program Files (x86)/Steam/steamapps/common/assettocorsa"
 #
 #
 
-speed_file_path = Path("%appdata%/AssettoCorsaFanControl/speed.json")
+speed_file_path = Path.home() / "AppData" / "Roaming" / "AssettoCorsaFanControl" / "speed.json"
 simInfo = SimInfo()
 my_car_id = 0
 window_width = 350

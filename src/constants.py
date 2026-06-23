@@ -6,4 +6,4 @@ REQUIRED_METHODS = [
     "set_speed"
 ]
 
-SPEED_FILE_PATH = Path("%appdata%/AssettoCorsaFanControl/speed.json")
+SPEED_FILE_PATH = Path.home() / "AppData" / "Roaming" / "AssettoCorsaFanControl" / "speed.json"
