@@ -2,15 +2,20 @@
 # Assetto Corsa Fan Control
 
 ## What this does
-- In game car speed controls your real-life fan 𖣘
-- As of now, Xiaomi Smart Fans are supported
+- Assetto Corsa car speed -> change fan 𖣘 speed irl
+- Xiaomi Smart Fans supported
 
 ## Disclaimer OS
-- Currently *Windows* is supported
+- Currently *Windows* supported
 
-## Prerequisities
-- Python - preferably version 3.12
-- Cloning this repo
+## Prerequisities (start here)
+- Python - version 3.12
+- Clone this repo
+  - Choose some folder
+  - Open terminal in said folder
+  - `git clone https://github.com/xxxmoney/assetto-corsa-fan-control`
+  - Open folder `assetto-corsa-fan-control`
+  - Continue with [Setup for Plugin](#setup-for-plugin)
 
 ## What's in here
 - There are two main parts
@@ -18,34 +23,36 @@
   - A python script (sets speed to fan)
 
 ## Setup for `Plugin`
-- Copy the whole folder `wind_speed` from `/addon` to your Assetto Corsa apps path
-  - May be something like this:
+- Copy whole folder `wind_speed` from `/addon` to Assetto Corsa ath
+  - Something like this:
     - `C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\python\wind_speed`
-- Make sure the path is correct in the `wind_speed\wind_speed.py` file:
+- Make sure path correct in the `wind_speed\wind_speed.py`:
   - `assetto_path = Path("C:/Program Files (x86)/Steam/steamapps/common/assettocorsa")`
+- Continue with [Setup for App](#setup-for-app)
 
 ## Setup for `App`
 - Get host address and token
   - Use this [Token Extractor](https://github.com/PiotrMachowski/Xiaomi-cloud-tokens-extractor)
 - Rename `config.example.toml` -> `config.toml`
-  - Set the values - the ones you got from the Token Extractor
-    - host is ip address (something like `192.168.1.5`) of the device
+  - Set values - from Token Extractor
+    - host is ip address (something like `192.168.1.5`) of device
     - token is token (like `6666u9q32df4fe84383f362a44cd678b`) >]
+- Continue with [Setup final](#setup-final)
 
 ## Setup final
-- After you have done the setup for `Plugin` and `App`, you can do these steps:
-  - Open terminal and run these two commands (make sure you are in the correct directory)
+- After steps [Setup for Plugin](#setup-for-plugin) and [Setup for App](#setup-for-app), do this
+  - Open terminal run commands (make sure you in correct directory)
     - `poetry install`
     - `poetry run dev`
-  - The app will now run in background (it should periodically write stuff in console)
+  - App will run in background (it should write stuff)
+- Continue with [Testing](#testing)
 
-## Testing 
-  - I advise testing before starting the game
-  - Change the value of this file
+## Testing
+  - Change text in file:
     - `"C:\Users\%username%\AppData\Roaming\AssettoCorsaFanControl\speed.json"`
-      - If the file does not exist, just create it and put this value in:
-        - `{"percentage": 0}`
-        - You can now play with the value, like setting `{"percentage": 50}`, `{"percentage": 80}`, etc
-        - After setting the value and saving, it should change the fan speed
-  - If the above works correctly, you can start the game >]
+      - If file does not exist, create it
+      - You can now play with it, like setting `{"percentage": 50}`, `{"percentage": 80}`, etc
+  - After setting value, saving, should change fan speed
+  - If above works correctly, you start game >]
+  - If not, look at program output in terminal
   

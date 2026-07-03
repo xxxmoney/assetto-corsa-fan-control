@@ -11,13 +11,23 @@ class Fan:
     _host: str
     _token: str
     _device: Device
+    _is_valid: bool
 
     def __init__(self, host: str, token: str):
-        self._device = DeviceFactory.create(host, token)
+        self._host = host
+        self._token = token
 
-    def validate(self) -> bool:
+    def initialize(self) -> bool:
+        self._device = DeviceFactory.create(self._host, self._token)
+
         is_valid = set(REQUIRED_METHODS).issubset(self.methods)
         logger.debug(f"Validation: {is_valid}")
+        self._is_valid = is_valid
+
+        # Try to use generic fan if does not support basic methods out of the box
+        if not is_valid:
+            logger.warn("Unsupported fan, will try to use generic methods")
+
         return is_valid
 
     @property
@@ -34,11 +44,17 @@ class Fan:
 
     def on(self):
         logger.debug("On")
-        self._device.on()
+        if isinstance(self._device, Fan1C):
+            self._device.on()
+        else:
+            self._device.send("set_properties", [{"did": "1", "siid": 2, "piid": 1, "value": True}])
 
     def off(self):
         logger.debug("Off")
-        self._device.off()
+        if isinstance(self._device, Fan1C):
+            self._device.off()
+        else:
+            self._device.send("set_properties", [{"did": "1", "siid": 2, "piid": 1, "value": False}])
 
     def set_speed(self, speed: int):
         logger.debug(f"Speed: {speed}")
@@ -63,4 +79,4 @@ class Fan:
                 self.off()
             else:
                 self.on()
-                self._device.set_speed(speed)
+                self._device.send("set_properties", [{"did": "1", "siid": 2, "piid": 5, "value": speed}])
