@@ -1,4 +1,3 @@
 
-[fan]
-username = ""
-password = ""
+host = ""
+token = ""
