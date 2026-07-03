@@ -1,0 +1,23 @@
+[project]
+name = "assetto-corsa-fan-control"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "xxxmoney",email = "xxxmoney111@gmail.com"}
+]
+readme = "README.md"
+requires-python = "3.12"
+dependencies = [
+    "python-miio @ git+https://github.com/rytilahti/python-miio.git",
+]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry]
+packages = [{include = "src"}]
+
+[project.scripts]
+dev = "src.main:main"
+
