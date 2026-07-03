@@ -8,6 +8,17 @@
 ## Disclaimer OS
 - Currently *Windows* supported
 
+## What's in here
+- Two main parts
+  - Assetto Corsa plugin (reads speed from game)
+  - A python script (sets speed to fan)
+
+## Supported Xiaomi Devices
+- Many of the Xiaomi Fans are supported
+- Most are specified in the `src\fan_mapping.py` file
+- AS OF NOW - supported `stepless` devices
+- TO BE DONE: support `gear` devices - speed 1, 2, 3, 4
+
 ## Prerequisities (start here)
 - Python - version 3.12
 - Clone this repo
@@ -17,13 +28,8 @@
   - Open folder `assetto-corsa-fan-control`
   - Continue with [Setup for Plugin](#setup-for-plugin)
 
-## What's in here
-- There are two main parts
-  - Assetto Corsa plugin (reads speed from game)
-  - A python script (sets speed to fan)
-
 ## Setup for `Plugin`
-- Copy whole folder `wind_speed` from `/addon` to Assetto Corsa ath
+- Copy whole folder `wind_speed` from `/addon` to Assetto Corsa path
   - Something like this:
     - `C:\Program Files (x86)\Steam\steamapps\common\assettocorsa\apps\python\wind_speed`
 - Make sure path correct in the `wind_speed\wind_speed.py`:
@@ -41,10 +47,10 @@
 
 ## Setup final
 - After steps [Setup for Plugin](#setup-for-plugin) and [Setup for App](#setup-for-app), do this
-  - Open terminal run commands (make sure you in correct directory)
+  - Open terminal run commands (make sure you in correct directory - same directory as `pyproject.toml`)
     - `poetry install`
     - `poetry run dev`
-  - App will run in background (it should write stuff)
+  - App will run in terminal (it should write stuff periodically)
 - Continue with [Testing](#testing)
 
 ## Testing
