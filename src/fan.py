@@ -1,8 +1,9 @@
+from functools import cached_property
 from miio import DeviceFactory
 from miio import Device
 from miio import DeviceInfo
 from miio import Fan1C
-from src.constants import REQUIRED_METHODS
+from src.fan_mappings import FAN_MAPPINGS
 from src.logger import logger
 from src.speed_translation import speed_to_level, SpeedLevel
 
@@ -17,26 +18,16 @@ class Fan:
         self._host = host
         self._token = token
 
-    def initialize(self) -> bool:
+    def initialize(self):
         self._device = DeviceFactory.create(self._host, self._token)
 
-        is_valid = set(REQUIRED_METHODS).issubset(self.methods)
-        logger.debug(f"Validation: {is_valid}")
-        self._is_valid = is_valid
-
-        # Try to use generic fan if does not support basic methods out of the box
-        if not is_valid:
-            logger.warn("Unsupported fan, will try to use generic methods")
-
-        return is_valid
-
-    @property
+    @cached_property
     def methods(self) -> list[str]:
         methods = [m for m in dir(self._device) if not m.startswith('_')]
         logger.debug(f"Methods: {methods}")
         return methods
 
-    @property
+    @cached_property
     def info(self) -> DeviceInfo:
         info = self._device.info()
         logger.debug(f"Info: {info}")
@@ -47,14 +38,16 @@ class Fan:
         if isinstance(self._device, Fan1C):
             self._device.on()
         else:
-            self._device.send("set_properties", [{"did": "1", "siid": 2, "piid": 1, "value": True}])
+            mapping = FAN_MAPPINGS[self.info.model]
+            self._device.send("set_properties", [{"did": "1", "siid": mapping["power"]["siid"], "piid": mapping["power"]["piid"], "value": True}])
 
     def off(self):
         logger.debug("Off")
         if isinstance(self._device, Fan1C):
             self._device.off()
         else:
-            self._device.send("set_properties", [{"did": "1", "siid": 2, "piid": 1, "value": False}])
+            mapping = FAN_MAPPINGS[self.info.model]
+            self._device.send("set_properties", [{"did": "1", "siid": mapping["power"]["siid"], "piid": mapping["power"]["piid"], "value": False}])
 
     def set_speed(self, speed: int):
         logger.debug(f"Speed: {speed}")
@@ -79,4 +72,11 @@ class Fan:
                 self.off()
             else:
                 self.on()
-                self._device.send("set_properties", [{"did": "1", "siid": 2, "piid": 5, "value": speed}])
+
+                mapping = FAN_MAPPINGS[self.info.model]
+                if mapping["speed_type"] is "stepless":
+                    self._device.send("set_properties",[{"did": "1", "siid": mapping["speed"]["siid"], "piid": mapping["speed"]["piid"], "value": speed}])
+                elif mapping["speed_type"] is "gear":
+                    raise NotImplementedError("TODO: implement gear")
+                else:
+                    raise ValueError(f"Speed type is not supported: {mapping["speed_type"]}")

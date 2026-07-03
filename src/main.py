@@ -14,8 +14,7 @@ def main():
 
     logger.info(f"Setting up fan")
     fan = Fan(config["host"], config["token"])
-    if not fan.initialize():
-        logger.warn("Fan not supported, will try to use general methods")
+    fan.initialize()
 
     while True:
         if not SPEED_FILE_PATH.exists():
