@@ -1,4 +1,4 @@
-﻿from pathlib import Path
+import os
 import ac
 import acsys
 import json
@@ -8,12 +8,13 @@ from third_party.sim_info import *
 #
 #                    CHANGE THIS IF NEEDED:
 #                    ↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-assetto_path = Path("C:/Program Files (x86)/Steam/steamapps/common/assettocorsa")
+assetto_path = "C:/Program Files (x86)/Steam/steamapps/common/assettocorsa"
 #                    ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑
 #
 #
 
-speed_file_path = Path.home() / "AppData" / "Roaming" / "AssettoCorsaFanControl" / "speed.json"
+appdata = os.environ.get('APPDATA', '')
+speed_file_path = os.path.join(appdata, "AssettoCorsaFanControl", "speed.json")
 simInfo = SimInfo()
 my_car_id = 0
 window_width = 350
@@ -81,15 +82,19 @@ def acUpdate(deltaT):
         log("Speed changed: " + str(last_speed) + " -> " + str(speed))
         last_speed = speed
         percentage = int(speed / max_speed * 100)
+        
+        # Cap at 100% just in case we go slightly above top speed
+        if percentage > 100:
+            percentage = 100
 
         set_speed_file(percentage)
 
     # Update UI
-    if label_speed and speed:
+    if label_speed is not None:
         ac.setText(label_speed, "Speed: " + str(speed) + " km/h")
-    if label_model and car_model:
+    if label_model is not None and car_model:
         ac.setText(label_model, "Model: " + car_model)
-    if label_max_speed and max_speed:
+    if label_max_speed is not None and max_speed:
         ac.setText(label_max_speed, "Max Speed: " + str(max_speed) + " km/h")
 
 def acShutdown():
@@ -105,7 +110,7 @@ def parse_max_speed(model):
         return None
 
     log("Parsing max speed for model: " + model + "...")
-    path = assetto_path / "/content/cars/" / model + "/ui/ui_car.json"
+    path = os.path.join(assetto_path, "content", "cars", model, "ui", "ui_car.json")
     log("Path: " + path)
 
     if not os.path.exists(path):
@@ -138,7 +143,7 @@ def set_speed_file(percentage):
 
     # Write speed percentage to json file
     try:
-        speed_file_path.parent.mkdir(parents=True, exist_ok=True)
+        os.makedirs(os.path.dirname(speed_file_path), exist_ok=True)
 
         with open(speed_file_path, 'w', encoding='utf-8') as file:
             json.dump({"percentage": percentage}, file)
