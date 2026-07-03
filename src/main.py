@@ -23,8 +23,8 @@ def main():
 
         logger.info("Loading speed file")
         speed_value = json.loads(SPEED_FILE_PATH.read_text(encoding="utf-8"))
-        logger.info(f"Setting up fan")
 
+        logger.info("Setting speed")
         fan.set_speed(speed_value["percentage"])
 
         sleep(1)

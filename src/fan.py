@@ -55,7 +55,7 @@ class Fan:
         if speed < 0 or speed > 100:
             raise ValueError("Speed must be between 0 and 100")
 
-        # Special handling for 1C (it has 3 levels of speed)
+        # Special handling for 1C (3 levels of speed)
         if isinstance(self._device, Fan1C):
             level = speed_to_level(speed)
             logger.debug(f"Set speed level: {speed}->{level}")
