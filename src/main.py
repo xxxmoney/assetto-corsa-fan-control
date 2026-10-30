@@ -21,11 +21,14 @@ def main():
             logger.warning("Speed file does not exist")
             return
 
-        logger.info("Loading speed file")
-        speed_value = json.loads(SPEED_FILE_PATH.read_text(encoding="utf-8"))
+        try:
+            logger.info("Loading speed file")
+            speed_value = json.loads(SPEED_FILE_PATH.read_text(encoding="utf-8"))
 
-        logger.info("Setting speed")
-        fan.set_speed(speed_value["percentage"])
+            logger.info("Setting speed")
+            fan.set_speed(speed_value["percentage"])
+        except Exception as e:
+            logger.error(e)
 
         sleep(1)
 
